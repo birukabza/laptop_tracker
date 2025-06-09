@@ -46,6 +46,18 @@ try {
     )";
     $conn->exec($sql);
 
+    // Create guards table
+    $sql = "CREATE TABLE IF NOT EXISTS guards (\n        id VARCHAR(20) PRIMARY KEY,\n        password VARCHAR(255) NOT NULL,\n        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n    )";
+    $conn->exec($sql);
+
+    // Insert dummy guard data if not exists
+    $stmt = $conn->prepare("INSERT IGNORE INTO guards (id, password) VALUES (?, ?)");
+    $stmt->execute(['grd/1234/14', password_hash('guardpass', PASSWORD_DEFAULT)]);
+
+    // Create ceased laptops table
+    $sql = "CREATE TABLE IF NOT EXISTS ceased_laptops (\n        id INT AUTO_INCREMENT PRIMARY KEY,\n        student_id VARCHAR(20) NOT NULL,\n        laptop_serial VARCHAR(100) NOT NULL,\n        laptop_model VARCHAR(100) NOT NULL,\n        reason_ceased VARCHAR(255) NOT NULL,\n        ceased_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n        status ENUM('ceased', 'returned') DEFAULT 'ceased'\n    )";
+    $conn->exec($sql);
+
     // Insert dummy university student data if not exists
     $dummy_students = [
         ['UGR/1234/15', 'Biruk Geremew', 'Computer Science', 3],
