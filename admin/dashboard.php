@@ -105,7 +105,7 @@ try {
     </div>
 
     <!-- Add Registration Modal -->
-    <div id="addRegistrationModal" class="modal" style="display: none;">
+    <div id="addRegistrationModal" class="modal">
         <div class="modal-content">
             <h2>Register New Laptop</h2>
             <form id="addRegistrationForm" action="process_registration.php" method="POST">
@@ -129,11 +129,11 @@ try {
                         <option value="stolen">Stolen</option>
                     </select>
                 </div>
-                <div class="modal-actions">
-                    <button type="submit" class="btn btn-primary">Register Laptop</button>
-                    <button type="button" class="btn btn-secondary" onclick="hideAddRegistrationModal()">Cancel</button>
-                </div>
             </form>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="hideAddRegistrationModal()">Cancel</button>
+                <button type="submit" form="addRegistrationForm" class="btn btn-primary">Register Laptop</button>
+            </div>
         </div>
     </div>
 
@@ -141,7 +141,6 @@ try {
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <h2>Delete Registration</h2>
-            <p>Are you sure you want to permanently delete this laptop registration?</p>
             <div class="student-info">
                 <p><strong>Laptop Serial:</strong> <span id="deleteSerial"></span></p>
                 <p><strong>Laptop Model:</strong> <span id="deleteModel"></span></p>
