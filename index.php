@@ -63,7 +63,7 @@
         </ul>
     </div>
     <footer>
-        <p>&copy; 2023 Laptop Tracker. All rights reserved.</p>
+        <p>&copy; 2025 Laptop Tracker. All rights reserved.</p>
     </footer>
 </body>
 </html> 
