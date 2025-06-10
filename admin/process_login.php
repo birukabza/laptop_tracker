@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: dashboard.php");
                 exit();
             } else {
-                header("Location: login.php?error=Invalid password");
+                header("Location: login.php?error=Invalid password or admin ID");
                 exit();
             }
         } else {
