@@ -26,9 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             // Register the student in student_users table
             $stmt = $conn->prepare("INSERT INTO student_users (student_id, password, full_name, email) VALUES (?, ?, ?, ?)");
-            // For now, let's assume email is not collected in signup form, or add it if needed.
-            // For simplicity, I'm using a placeholder for email. You might need to add an email field to signup.php
-            if ($stmt->execute([$student_id, $password, $full_name, ''])) { // Empty email placeholder
+            
+            if ($stmt->execute([$student_id, $password, $full_name, ''])) { 
                 $success = "Registration successful! Please login.";
             } else {
                 $error = "Registration failed. Please try again.";
