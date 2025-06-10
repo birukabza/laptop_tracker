@@ -47,7 +47,11 @@ try {
     $conn->exec($sql);
 
     // Create guards table
-    $sql = "CREATE TABLE IF NOT EXISTS guards (\n        id VARCHAR(20) PRIMARY KEY,\n        password VARCHAR(255) NOT NULL,\n        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n    )";
+    $sql = "CREATE TABLE IF NOT EXISTS guards (
+        id VARCHAR(20) PRIMARY KEY,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )";
     $conn->exec($sql);
 
     // Insert dummy guard data if not exists
@@ -55,7 +59,40 @@ try {
     $stmt->execute(['grd/1234/14', password_hash('guardpass', PASSWORD_DEFAULT)]);
 
     // Create ceased laptops table
-    $sql = "CREATE TABLE IF NOT EXISTS ceased_laptops (\n        id INT AUTO_INCREMENT PRIMARY KEY,\n        student_id VARCHAR(20) NOT NULL,\n        laptop_serial VARCHAR(100) NOT NULL,\n        laptop_model VARCHAR(100) NOT NULL,\n        reason_ceased VARCHAR(255) NOT NULL,\n        ceased_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n        status ENUM('ceased', 'returned') DEFAULT 'ceased'\n    )";
+    $sql = "CREATE TABLE IF NOT EXISTS ceased_laptops (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        student_id VARCHAR(20) NOT NULL,
+        laptop_serial VARCHAR(100) NOT NULL,
+        laptop_model VARCHAR(100) NOT NULL,
+        reason_ceased VARCHAR(255) NOT NULL,
+        ceased_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status ENUM('ceased', 'returned') DEFAULT 'ceased'
+    )";
+    $conn->exec($sql);
+
+    // Create student_users table
+    $sql = "CREATE TABLE IF NOT EXISTS student_users (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        student_id VARCHAR(20) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        full_name VARCHAR(255) NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (student_id) REFERENCES university_students(id)
+    )";
+    $conn->exec($sql);
+
+    // Create reported_laptops table
+    $sql = "CREATE TABLE IF NOT EXISTS reported_laptops (
+        report_id INT PRIMARY KEY AUTO_INCREMENT,
+        laptop_id INT NOT NULL,
+        student_id VARCHAR(20) NOT NULL,
+        report_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        status ENUM('reported', 'found') DEFAULT 'reported',
+        found_date DATETIME,
+        FOREIGN KEY (laptop_id) REFERENCES laptop_registrations(id),
+        FOREIGN KEY (student_id) REFERENCES university_students(id)
+    )";
     $conn->exec($sql);
 
     // Insert dummy university student data if not exists
