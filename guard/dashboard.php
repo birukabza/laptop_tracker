@@ -36,7 +36,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guard Dashboard - Laptop Sentinel</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=1.1">
 </head>
 <body>
     <div class="container">
@@ -106,7 +106,7 @@ try {
                                 <?php foreach($ceased_laptops as $laptop): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($laptop['id']); ?></td>
-                                    <td><?php echo htmlspecialchars($laptop['student_id']); ?></td>
+                                    <td><?php echo htmlspecialchars(urldecode($laptop['student_id'])); ?></td>
                                     <td><?php echo htmlspecialchars($laptop['laptop_serial']); ?></td>
                                     <td><?php echo htmlspecialchars($laptop['laptop_model']); ?></td>
                                     <td><?php echo htmlspecialchars(urldecode($laptop['reason_ceased'])); ?></td>
@@ -148,7 +148,7 @@ try {
                             <tbody>
                                 <?php foreach($stolen_laptops as $laptop): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($laptop['student_id']); ?></td>
+                                    <td><?php echo htmlspecialchars(urldecode($laptop['student_id'])); ?></td>
                                     <td><?php echo htmlspecialchars($laptop['full_name']); ?></td>
                                     <td><?php echo htmlspecialchars($laptop['department']); ?></td>
                                     <td><?php echo htmlspecialchars($laptop['laptop_serial']); ?></td>
