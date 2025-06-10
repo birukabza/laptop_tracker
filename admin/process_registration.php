@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = trim($_POST['student_id']);
     $laptop_serial = trim($_POST['laptop_serial']);
     $laptop_model = trim($_POST['laptop_model']);
-    $status = isset($_POST['status']) && in_array($_POST['status'], ['stolen', 'not stolen']) ? $_POST['status'] : 'not stolen';
+    $status = isset($_POST['status']) && in_array($_POST['status'], ['stolen', 'not stolen', 'ceased']) ? $_POST['status'] : 'not stolen';
     $registration_id = isset($_POST['registration_id']) ? (int)$_POST['registration_id'] : 0;
 
     // Validate input
