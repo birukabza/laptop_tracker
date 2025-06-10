@@ -29,6 +29,7 @@ try {
         full_name VARCHAR(100) NOT NULL,
         department VARCHAR(100) NOT NULL,
         year_of_study INT NOT NULL,
+        phone VARCHAR(20) UNIQUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
     $conn->exec($sql);
@@ -97,14 +98,14 @@ try {
 
     // Insert dummy university student data if not exists
     $dummy_students = [
-        ['UGR/1234/15', 'Biruk Geremew', 'Computer Science', 3],
-        ['UGR/1235/15', 'Dagemawi Bekele', 'Information Technology', 2],
-        ['UGR/1236/15', 'Fitsum Ferdu', 'Computer Science', 4],
-        ['UGR/1237/15', 'Dagem Shiferaw', 'Information Technology', 3],
-        ['UGR/1238/15', 'Abebe Kebede', 'Computer Science', 2]
+        ['UGR/1234/15', 'Biruk Geremew', 'Computer Science', 3, '0911223344'],
+        ['UGR/1235/15', 'Dagemawi Bekele', 'Information Technology', 2, '0922334455'],
+        ['UGR/1236/15', 'Fitsum Ferdu', 'Computer Science', 4, '0933445566'],
+        ['UGR/1237/15', 'Dagem Shiferaw', 'Information Technology', 3, '0944556677'],
+        ['UGR/1238/15', 'Abebe Kebede', 'Computer Science', 2, '0955667788']
     ];
 
-    $stmt = $conn->prepare("INSERT IGNORE INTO university_students (id, full_name, department, year_of_study) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT IGNORE INTO university_students (id, full_name, department, year_of_study, phone) VALUES (?, ?, ?, ?, ?)");
     foreach ($dummy_students as $student) {
         $stmt->execute($student);
     }

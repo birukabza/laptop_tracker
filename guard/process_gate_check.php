@@ -37,6 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
 
+            // Check if student is signed up (exists in student_users)
+            $stmt = $conn->prepare("SELECT * FROM student_users WHERE student_id = ?");
+            $stmt->execute([$student_id]);
+            $signed_up = $stmt->fetch();
+
+            if (!$signed_up) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => "Student with ID '$student_id' is not signed up. Please ask the student to sign up before verification.",
+                    'reason_ceased' => 'Student not signed up'
+                ]);
+                exit();
+            }
+
             // 2. Check laptop registration for the student
             $stmt = $conn->prepare("SELECT * FROM laptop_registrations WHERE student_id = ? AND laptop_serial = ?");
             $stmt->execute([$student_id, $laptop_serial]);
@@ -64,9 +78,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $model_stmt->execute([$laptop_serial]);
                 $found_model = $model_stmt->fetchColumn() ?: 'Unknown';
 
+                $owner_message = "";
+                $owner_stmt = $conn->prepare("SELECT us.full_name FROM laptop_registrations lr JOIN university_students us ON lr.student_id = us.id WHERE lr.laptop_serial = ? LIMIT 1");
+                $owner_stmt->execute([$laptop_serial]);
+                $actual_owner = $owner_stmt->fetchColumn();
+
+                if ($actual_owner) {
+                    $owner_message = " It belongs to {$actual_owner}.";
+                }
+
                 echo json_encode([
                     'success' => false,
-                    'message' => "Verification failed: Laptop (Serial: {$laptop_serial}) is NOT REGISTERED to student {$student['full_name']} or status is incorrect. Click 'Cease Laptop' to record.",
+                    'message' => "Verification failed: Laptop (Serial: {$laptop_serial}) is NOT REGISTERED to student {$student['full_name']} or status is incorrect." . $owner_message . " Click 'Cease Laptop' to record.",
                     'reason_ceased' => 'Serial mismatch or not registered to student',
                     'student' => $student, // Pass student info for cease action
                     'laptop' => ['laptop_serial' => $laptop_serial, 'laptop_model' => $found_model] // Pass laptop info for cease action

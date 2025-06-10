@@ -81,11 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Check if student exists in university_students table
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM university_students WHERE id = ?");
+    // Check if student exists in student_users table
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM student_users WHERE student_id = ?");
     $stmt->execute([$student_id]);
     if ($stmt->fetchColumn() == 0) {
-        $_SESSION['error'] = "Student with ID $student_id not found in university database.";
+        $_SESSION['error'] = "Student with ID $student_id is not registered in the system. Please ask the student to sign up first.";
         header('Location: ' . ($registration_id ? "edit_registration.php?id=$registration_id" : "dashboard.php"));
         exit();
     }

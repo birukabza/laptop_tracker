@@ -9,8 +9,6 @@ if (!isset($_SESSION['student_id'])) {
 }
 
 $student_id = $_SESSION['student_id'];
-$success_message = '';
-$error_message = '';
 
 // Handle laptop reporting
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['report_laptop'])) {
@@ -28,13 +26,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['report_laptop'])) {
             // Update laptop status in laptop_registrations table
             $stmt = $conn->prepare("UPDATE laptop_registrations SET status = 'stolen' WHERE id = ?");
             $stmt->execute([$laptop_id]);
-            $success_message = "Laptop reported successfully!";
+            $_SESSION['success_message'] = "Laptop reported successfully!";
         } else {
-            $error_message = "Failed to report laptop. Please try again.";
+            $_SESSION['error_message'] = "Failed to report laptop. Please try again.";
         }
     } else {
-        $error_message = "This laptop has already been reported.";
+        $_SESSION['error_message'] = "This laptop has already been reported.";
     }
+    header("Location: dashboard.php");
+    exit();
 }
 
 // Handle laptop found claim
@@ -47,10 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['claim_found'])) {
         // Update laptop status in laptop_registrations table
         $stmt = $conn->prepare("UPDATE laptop_registrations SET status = 'not stolen' WHERE id = ?");
         $stmt->execute([$laptop_id]);
-        $success_message = "Laptop marked as found successfully!";
+        $_SESSION['success_message'] = "Laptop marked as found successfully!";
     } else {
-        $error_message = "Failed to update laptop status. Please try again.";
+        $_SESSION['error_message'] = "Failed to update laptop status. Please try again.";
     }
+    header("Location: dashboard.php");
+    exit();
 }
 
 // Get student's registered laptops
@@ -90,11 +92,11 @@ $laptops = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <a class="btn btn-secondary" href="logout.php">Logout</a>
                 </div>
             </div>
-            <?php if ($success_message): ?>
-                <div class="success-message"><?php echo $success_message; ?></div>
+            <?php if (isset($_SESSION['success_message'])): ?>
+                <div class="success-message"><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
             <?php endif; ?>
-            <?php if ($error_message): ?>
-                <div class="error-message"><?php echo $error_message; ?></div>
+            <?php if (isset($_SESSION['error_message'])): ?>
+                <div class="error-message"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
             <?php endif; ?>
             <div class="table-container">
                 <table>

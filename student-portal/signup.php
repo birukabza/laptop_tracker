@@ -10,13 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $full_name = $_POST['full_name'];
 
-    // Verify if student exists in the database
+    // Verify if student exists in the university_students table and get their details
     $stmt = $conn->prepare("SELECT * FROM university_students WHERE id = ?");
     $stmt->execute([$student_id]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $university_student_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($result) {
-        // Check if student is already registered
+    if ($university_student_data) {
+        // Check if student is already registered in student_users
         $stmt = $conn->prepare("SELECT * FROM student_users WHERE student_id = ?");
         $stmt->execute([$student_id]);
         $user_result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,16 +24,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($user_result) {
             $error = "You are already registered. Please login instead.";
         } else {
-            // Register the student
-            $stmt = $conn->prepare("INSERT INTO student_users (student_id, password, full_name) VALUES (?, ?, ?)");
-            if ($stmt->execute([$student_id, $password, $full_name])) {
+            // Register the student in student_users table
+            $stmt = $conn->prepare("INSERT INTO student_users (student_id, password, full_name, email) VALUES (?, ?, ?, ?)");
+            // For now, let's assume email is not collected in signup form, or add it if needed.
+            // For simplicity, I'm using a placeholder for email. You might need to add an email field to signup.php
+            if ($stmt->execute([$student_id, $password, $full_name, ''])) { // Empty email placeholder
                 $success = "Registration successful! Please login.";
             } else {
                 $error = "Registration failed. Please try again.";
             }
         }
     } else {
-        $error = "Student ID not found in the database. Please verify your student ID.";
+        $error = "Student ID not found in the university database. Please verify your student ID.";
     }
 }
 ?>

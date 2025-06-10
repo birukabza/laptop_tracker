@@ -322,8 +322,9 @@ tr:hover {
 }
 
 .modal-content h2 {
-    margin-bottom: 20px;
+    text-align: center;
     color: #2c3e50;
+    margin-bottom: 1.5rem;
 }
 
 .modal-content form {
@@ -335,17 +336,34 @@ tr:hover {
 }
 
 .modal-actions {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 15px 20px;
-    background: white;
-    border-top: 1px solid #eee;
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    border-radius: 0 0 10px 10px;
+    justify-content: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.delete-info-display {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.delete-info-display p {
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-size: 1.1rem;
+}
+
+.delete-info-display p:last-child {
+    margin-bottom: 0;
+}
+
+.delete-info-display strong {
+    color: #333;
+    font-weight: 600;
 }
 
 /* Edit form styles */
