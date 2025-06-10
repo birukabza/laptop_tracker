@@ -210,7 +210,6 @@ try {
             document.querySelector('.tab-button.active').click();
         });
 
-        // AJAX for student info in Gate Verification
         document.getElementById('gv_student_id').addEventListener('blur', function() {
             const studentId = this.value;
             const studentInfoDiv = document.getElementById('gvStudentInfo');
@@ -314,9 +313,7 @@ try {
                         if (data.student.phone) {
                             html += `<p><strong>Phone:</strong> ${data.student.phone}</p>`;
                         }
-                        if (data.student.email) {
-                            html += `<p><strong>Email:</strong> ${data.student.email}</p>`;
-                        }
+                        
                         if (data.student.user_created_at) {
                             html += `<p><strong>Account Created:</strong> ${data.student.user_created_at}</p>`;
                         }
