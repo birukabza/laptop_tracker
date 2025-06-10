@@ -12,13 +12,25 @@ if (!isset($_SESSION['admin_id'])) {
 if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
     $registration_id = (int)$_GET['id'];
     
-    // Delete the registration
-    $stmt = $conn->prepare("DELETE FROM laptop_registrations WHERE id = ?");
-    
-    if ($stmt->execute([$registration_id])) {
+    try {
+        // Start a transaction
+        $conn->beginTransaction();
+        
+        // First delete related records in reported_laptops table
+        $stmt = $conn->prepare("DELETE FROM reported_laptops WHERE laptop_id = ?");
+        $stmt->execute([$registration_id]);
+        
+        // Then delete the laptop registration
+        $stmt = $conn->prepare("DELETE FROM laptop_registrations WHERE id = ?");
+        $stmt->execute([$registration_id]);
+        
+        // If everything went well, commit the transaction
+        $conn->commit();
         $_SESSION['success'] = "Laptop registration deleted successfully.";
-    } else {
-        $_SESSION['error'] = "Error deleting laptop registration.";
+    } catch(PDOException $e) {
+        // If there was an error, rollback the transaction
+        $conn->rollBack();
+        $_SESSION['error'] = "Error deleting laptop registration: " . $e->getMessage();
     }
     
     header('Location: dashboard.php');
