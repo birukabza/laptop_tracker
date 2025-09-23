@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($user) {
         if (password_verify($password, $user['password'])) {
+            if (session_status() === PHP_SESSION_ACTIVE) {
+                session_regenerate_id(true);
+            }
             $_SESSION['student_id'] = $user['student_id'];
             $_SESSION['student_name'] = $user['full_name'];
             header("Location: dashboard.php");

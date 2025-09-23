@@ -17,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $guard = $stmt->fetch();
 
         if ($guard && password_verify($password, $guard['password'])) {
+            if (session_status() === PHP_SESSION_ACTIVE) {
+                session_regenerate_id(true);
+            }
             $_SESSION['guard_id'] = $guard['id'];
             header("Location: dashboard.php");
             exit();
