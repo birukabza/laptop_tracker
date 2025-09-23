@@ -37,6 +37,7 @@ try {
                     <h1 class="dashboard-title">Laptop Registration Management</h1>
                 </div>
                 <div class="header-right">
+                    <a href="change_password.php" class="btn btn-secondary">Change Password</a>
                     <button class="btn btn-success" onclick="showAddRegistrationModal()">Register New Laptop</button>
                     <a href="logout.php" class="btn btn-danger">Logout</a>
                 </div>

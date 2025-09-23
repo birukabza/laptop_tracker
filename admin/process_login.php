@@ -24,6 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Password verification result: " . (password_verify($password, $admin['password']) ? 'true' : 'false'));
 
             if (password_verify($password, $admin['password'])) {
+                // Regenerate session ID on successful authentication
+                if (session_status() === PHP_SESSION_ACTIVE) {
+                    session_regenerate_id(true);
+                }
                 $_SESSION['admin_id'] = $admin['id'];
                 header("Location: dashboard.php");
                 exit();
